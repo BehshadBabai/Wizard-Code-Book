@@ -8,11 +8,16 @@
     "build"
   ],
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@codemirror/lang-javascript": "github:codemirror/lang-javascript",
     "@uiw/codemirror-theme-vscode": "^4.21.21",
     "@uiw/react-codemirror": "^4.21.21",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "antd": "^5.12.1",
+    "dotenv": "^16.3.1",
+    "firebase": "^10.7.1",
+    "react": "^18.0.2",
+    "react-dom": "^18.0.2",
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",

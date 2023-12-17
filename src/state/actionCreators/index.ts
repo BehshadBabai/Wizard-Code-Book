@@ -1,6 +1,5 @@
 import { ActionType } from '../actionTypes';
 import { Dispatch } from 'redux';
-import axios from 'axios';
 import {
   UpdateCellAction,
   MoveCellAction,
@@ -12,6 +11,7 @@ import {
 import { Cell, CellTypes } from '../cell';
 import bundler from '../../bundler';
 import { RootState } from '..';
+import { fetchSingleDocument } from '../../utilities/util';
 
 export const updateCell = (id: string, content: string): UpdateCellAction => {
   return {
@@ -73,15 +73,33 @@ export const createBundle = (cellId: string, input: string) => {
   };
 };
 
-export const fetchCells = () => {
+export const fetchCells = (
+  id: string,
+  setPageLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({ type: ActionType.FETCH_CELLS });
 
     try {
-      const { data }: { data: Cell[] } = await axios.get('/cells');
-      dispatch({ type: ActionType.FETCH_CELLS_COMPLETE, payload: data });
+      // fetch from firebase
+      const cellsDb = (await fetchSingleDocument('cells', id)).data() as object;
+      const cells = Object.values(cellsDb).map((cell: Cell) => {
+        cell.content = cell.content.replace(/  +/g, ' ');
+        return cell;
+      });
+
+      const orderDb = (await fetchSingleDocument('order', '1')).data();
+
+      const order = orderDb?.order as string[];
+
+      dispatch({
+        type: ActionType.FETCH_CELLS_COMPLETE,
+        payload: { cells, order },
+      });
     } catch (err: any) {
       dispatch({ type: ActionType.FETCH_CELLS_ERROR, payload: err.message });
+    } finally {
+      setPageLoading(false);
     }
   };
 };
@@ -95,7 +113,7 @@ export const saveCells = () => {
     const cells = order.map((id) => data[id]);
 
     try {
-      await axios.post('/cells', { cells });
+      // post to firebase
     } catch (err: any) {
       dispatch({ type: ActionType.SAVE_CELLS_ERROR, payload: err.message });
     }

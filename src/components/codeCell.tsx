@@ -14,6 +14,7 @@ interface CodeCellProps {
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
+  const [content, setContent] = React.useState(cell.content);
   const ref = React.useRef<any>(null);
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
@@ -49,6 +50,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cumulativeCode, cell.id]);
 
+  React.useEffect(() => {
+    setContent(cell.content);
+  }, [cell]);
+
   return (
     <Resizable direction='vertical'>
       <div
@@ -61,7 +66,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       >
         <Resizable direction='horizontal'>
           <CodeEditor
-            initialValue={cell.content}
+            initialValue={content}
             onChange={(value) => updateCell(cell.id, value)}
             width={width}
             height={height}

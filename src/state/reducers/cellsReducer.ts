@@ -19,7 +19,7 @@ const initialState: CellState = {
   data: {
     '123456': {
       id: '123456',
-      content: `## Behshad's JavaScript Notebook
+      content: `## Documentation
 This is an interactive coding environment. You can write JavaScript, see it executed, and write comprehensive documentation using markdown.
 
 - Click any text cell (including this one) to edit it
@@ -38,7 +38,7 @@ This is an interactive coding environment. You can write JavaScript, see it exec
           <button
             onClick={() => {
               document.querySelector('#root').parentElement.parentElement.style =
-                'background-color: red; color: white';
+                'background-color: blue; color: white';
             }}
           >
             Click Me
@@ -65,8 +65,8 @@ const reducer = produce((state, action: Action) => {
       return state;
     case ActionType.FETCH_CELLS_COMPLETE:
       state.loading = false;
-      state.order = action.payload.map((cell) => cell.id);
-      state.data = action.payload.reduce((acc, cell) => {
+      state.order = action.payload.order;
+      state.data = action.payload.cells.reduce((acc, cell) => {
         acc[cell.id] = cell;
         return acc;
       }, {} as CellState['data']);
