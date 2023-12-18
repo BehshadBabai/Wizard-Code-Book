@@ -47,7 +47,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     return () => {
       clearTimeout(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cumulativeCode, cell.id]);
 
   React.useEffect(() => {

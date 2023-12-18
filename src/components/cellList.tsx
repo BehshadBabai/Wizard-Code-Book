@@ -31,7 +31,6 @@ const CellList: React.FC<{
       if (userInfo) {
         fetchCells(userInfo.id, setPageLoading);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
     effect();
   }, []);
