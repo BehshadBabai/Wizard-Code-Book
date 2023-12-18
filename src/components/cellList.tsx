@@ -15,14 +15,14 @@ const CellList: React.FC<{
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   userInfo: UserInfo;
 }> = ({ setLoggedIn, userInfo }) => {
+  const [logoutLoading, setLogoutLoading] = React.useState(false);
   const [saveLoading, setSaveLoading] = React.useState(false);
   const [pageLoading, setPageLoading] = React.useState(true);
   const [api, contextHolder] = message.useMessage();
-  const cellsForDb = useTypedSelector((state) => state.cells.data);
-  const order = useTypedSelector((state) => state.cells.order);
-  const cells = useTypedSelector(({ cells: { order, data } }) => {
-    return order.map((id) => data[id]);
-  });
+  const wholeCells = useTypedSelector((state) => state.cells);
+  const cellsForDb = wholeCells.data;
+  const order = wholeCells.order;
+  const cells = order.map((id) => cellsForDb[id]);
 
   const { fetchCells } = useActions();
 
@@ -83,13 +83,17 @@ const CellList: React.FC<{
               <Button
                 type='primary'
                 style={{ background: '#DF691A' }}
+                loading={logoutLoading}
                 onClick={async () => {
                   try {
+                    setLogoutLoading(true);
                     await signOut(auth);
                     message.success('Log Out Successful');
                     setLoggedIn(false);
                   } catch (error) {
                     message.error('Log Out Failed');
+                  } finally {
+                    setLogoutLoading(false);
                   }
                 }}
               >

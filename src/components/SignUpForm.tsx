@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Row,
-  Space,
-  Typography,
-  message,
-} from 'antd';
+import { Button, Col, Form, Input, Row, Typography, message } from 'antd';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { addOrEditDoc } from '../utilities/util';
